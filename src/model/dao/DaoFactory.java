@@ -1,7 +1,6 @@
 package model.dao;
 
-import db.DB;
-import model.dao.MovieDao;
+import db.DB; 
 import model.dao.impl.MovieDaoJDBC;
 
 public class DaoFactory {

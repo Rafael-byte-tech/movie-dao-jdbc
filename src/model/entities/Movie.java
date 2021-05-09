@@ -5,18 +5,22 @@ import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
 public final class Movie implements Serializable{
+	//MOVIE ENTITIE CLASS
 	
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L; //SERIALIZABLE
 	
+	//ATTRIBUTES
 	private Integer id;
 	private String name, genre;
 	private Date releaseDate;
 	private Double budget, boxOffice;
 	private SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 	
+	//EMPTY CONSTRUCTOR
 	public Movie() {
 	}
-
+    
+	//CONSTRUCTOR
 	public Movie(Integer id, String name, String genre, Date releaseDate, Double budget, Double boxOffice) {
 		this.id = id;
 		this.name = name;
@@ -26,6 +30,7 @@ public final class Movie implements Serializable{
 		this.boxOffice = boxOffice;
 	}
 
+	//GETTERS AND SETTERS
 	public Integer getId() {
 		return id;
 	}
@@ -74,6 +79,7 @@ public final class Movie implements Serializable{
 		this.boxOffice = boxOffice;
 	}
 
+	//HASH CODE
 	@Override
 	public final int hashCode() {
 		final int prime = 31;
@@ -82,6 +88,7 @@ public final class Movie implements Serializable{
 		return result;
 	}
 
+	//EQUALS
 	@Override
 	public final boolean equals(Object obj) {
 		if (this == obj)
@@ -99,6 +106,7 @@ public final class Movie implements Serializable{
 		return true;
 	}
 
+	//TO STRING METHOD
 	public final String toString () {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Movie ");

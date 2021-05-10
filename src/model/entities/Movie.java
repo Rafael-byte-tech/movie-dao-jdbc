@@ -1,6 +1,6 @@
 package model.entities;
 
-import java.util.Date;
+import java.util.Date;  
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
@@ -116,7 +116,6 @@ public final class Movie implements Serializable{
 		sb.append("Release date = " + sdf.format(releaseDate) + ", ");
 		sb.append("Budget = " + budget + ", ");
 		sb.append("Box Office = " + boxOffice);
-        sb.append("]");
 		return sb.toString();
 	}
 }

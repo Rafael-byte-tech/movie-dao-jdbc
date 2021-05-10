@@ -1,9 +1,12 @@
 package model.dao.impl;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
@@ -96,7 +99,6 @@ public class MovieDaoJDBC implements MovieDao {
 		finally {
 			DB.closeStatement(st); //CLOSE STATEMENT
 			DB.closeResultSet(rs); //CLOSE RESULT SET
-			DB.closeConnection();  //CLOSE CONNECTION
 		}
 	}
 	
@@ -115,14 +117,79 @@ public class MovieDaoJDBC implements MovieDao {
 
 	@Override
 	public List<Movie> findAll() {
-		//FIND ALL MOVIES 
-		return null;
+		//FIND ALL MOVIES
+		
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		List<Movie> list = new ArrayList<Movie>();
+		
+		try {
+			st = conn.prepareStatement("SELECT * FROM movie");
+			rs = st.executeQuery();
+			
+			while(rs.next()) {
+				Movie obj = instantiateMovie(rs);
+				list.add(obj);
+			}
+			return list;
+		}
+		
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		finally {
+			DB.closeStatement(st);
+			DB.closeResultSet(rs);
+		}
 	}
 
 	@Override
 	public void add(Movie obj) {
-		// TODO Auto-generated method stub
+		//ADD MOVIE TO THE DB
 		
+		PreparedStatement st = null; //SQL STATEMENT
+		ResultSet rs = null;         //DISPLAY DATA
+		
+		//TRY BLOCK
+		try {
+			st = conn.prepareStatement("INSERT INTO movie (Name, Genre, ReleaseDate, Budget, BoxOffice) VALUES "
+					+"(?, ?, ?, ?, ?)", 
+					Statement.RETURN_GENERATED_KEYS);
+			st.setString(1, obj.getName());
+			st.setString(2, obj.getGenre());
+			st.setDate(3, new java.sql.Date(obj.getReleaseDate().getTime()));
+			st.setDouble(4, obj.getBudget());
+			st.setDouble(5, obj.getBoxOffice());
+			
+			Integer rowsAffected = st.executeUpdate();
+			
+			//IF BLOCK
+			if(rowsAffected > 0) {
+				rs = st.getGeneratedKeys();
+				//IF BLOCK
+				if (rs.next()) {           
+					Integer id = rs.getInt(1);
+					obj.setId(id);
+				}
+				DB.closeResultSet(rs); //CLOSE RESULT SET
+			}
+			
+			//ELSE BLOCK
+			else {
+				throw new DbException("Error. No rows Affected"); //DB EXCEPTION
+			}
+		}
+		
+		//CATCH BLOCK
+		catch(SQLException e) {
+			throw new DbException(e.getMessage()); //SQL EXCEPTION
+		}
+		
+		//FINALLY BLOCK
+		finally {
+			DB.closeStatement(st); //CLOSE STATEMENT
+		}
 	}
 
 	@Override

@@ -13,11 +13,21 @@ public class Program {
 		MovieDao movieDao = DaoFactory.createMovieDao();
 		
 		Integer id;
+		String name;
 		
-		System.out.println("=====Find Movie by Id=====");
+		System.out.println("=====Find movie by Id=====");
 		System.out.print("Enter movie Id: ");
 		id = sc.nextInt();
 		System.out.println(movieDao.findById(id));
+		
+		System.out.println("=====Find movie by name");
+		System.out.println("Enter movie name: ");
+		sc.nextLine();
+		name = sc.nextLine();
+		System.out.println(movieDao.findByName(name));
+		
+		
+		
 
 	}
 

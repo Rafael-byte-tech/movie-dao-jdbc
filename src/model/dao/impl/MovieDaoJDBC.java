@@ -61,6 +61,45 @@ public class MovieDaoJDBC implements MovieDao {
 		}
 	}
 	
+	@Override
+	public Movie findByName(String name) {
+		//FINDS MOVIE BY NAME
+		PreparedStatement st = null; //SQL STATEMENT
+		ResultSet rs = null;         //DISPLAY DATA
+		
+		//TRY BLOCK
+		try {
+			st = conn.prepareStatement("SELECT * FROM movie "
+					+ "WHERE movie.Name = ?");
+					
+			st.setString(1, name);
+			rs = st.executeQuery();
+			
+			//IF BLOCK
+			if(rs.next()) {
+				Movie obj = instantiateMovie(rs);
+				return obj;
+			}
+			
+			//ELSE BLOCK
+			else {
+				return null;
+			}
+		}
+		
+		//CATCH BLOCK
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		//FINALLY BLOCK
+		finally {
+			DB.closeStatement(st); //CLOSE STATEMENT
+			DB.closeResultSet(rs); //CLOSE RESULT SET
+			DB.closeConnection();  //CLOSE CONNECTION
+		}
+	}
+	
 	private Movie instantiateMovie(ResultSet rs) throws SQLException{ 
 		//INSTANTIATE A MOVIE FROM THE DB. USED IN THE FIND METHOD
 		
@@ -97,5 +136,7 @@ public class MovieDaoJDBC implements MovieDao {
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }

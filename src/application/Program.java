@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import db.DbException;
 import model.dao.DaoFactory;
 import model.dao.MovieDao;
 import model.entities.Movie;
@@ -13,21 +14,24 @@ import model.entities.Movie;
 public class Program {
 
 	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Scanner sc = new Scanner(System.in); //SCANNER
 		
-		Movie movie;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy"); //DATE FORMAT
 		
-		MovieDao movieDao = DaoFactory.createMovieDao();
+		Movie movie; //MOVIE CLASS
 		
-		Integer id;
+		MovieDao movieDao = DaoFactory.createMovieDao(); //DAO FACTORY(INSTATIATE A MOVIE OBJECT)
+		
+		//VARIABLES
+		Integer id; 
 		String name, genre;
 		Date releaseDate;
 		Double budget, boxOffice;
 		
+		//TRY BLOCK
 		try {
-			/*
+			
 			System.out.println("=====Find movie by Id=====");
 			System.out.print("Enter movie Id: ");
 			id = sc.nextInt();
@@ -41,7 +45,7 @@ public class Program {
 			
 			System.out.println("=====Find all movies");
 			movieDao.findAll().forEach(System.out::println);
-			*/
+			
 			System.out.println("=====Add movie into the database");
 			System.out.print("Name: ");
 			name = sc.nextLine();
@@ -59,8 +63,16 @@ public class Program {
 			movieDao.add(movie);
 			
 			System.out.println("Inserted. New movie Id = " + movie.getId());
+			
+			
+			System.out.println("=====DELETE MOVIE=====");
+			System.out.print("Enter an id of a movie to delete it: ");
+			id = sc.nextInt();
+			movieDao.deleteById(id);
+			System.out.println("Deletion completed.");
 		}
 		
+		//CATCH BLOCKS
 		catch (InputMismatchException e) {
 			System.out.println(e.getMessage());
 		}
@@ -69,7 +81,14 @@ public class Program {
 			System.out.println(e.getMessage());
 		}
 		
-		sc.close();
+		catch(DbException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		//FINALLY BLOCK
+		finally {
+			sc.close(); //CLOSE SCANNER
+		}
+		//END
 	}
-
 }

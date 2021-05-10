@@ -1,7 +1,6 @@
 package model.dao.impl;
 
-import java.sql.Connection;
-import java.sql.Date;
+import java.sql.Connection; 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -42,7 +41,7 @@ public class MovieDaoJDBC implements MovieDao {
 			
 			//IF BLOCK
 			if (rs.next()) {
-				Movie obj = instantiateMovie(rs);
+				Movie obj = instantiateMovie(rs); //OBJ INSTANTIATION
 				return obj;
 			}
 			
@@ -80,7 +79,7 @@ public class MovieDaoJDBC implements MovieDao {
 			
 			//IF BLOCK
 			if(rs.next()) {
-				Movie obj = instantiateMovie(rs);
+				Movie obj = instantiateMovie(rs); //OBJ INSTANTIATION
 				return obj;
 			}
 			
@@ -119,28 +118,34 @@ public class MovieDaoJDBC implements MovieDao {
 	public List<Movie> findAll() {
 		//FIND ALL MOVIES
 		
-		PreparedStatement st = null;
-		ResultSet rs = null;
-		List<Movie> list = new ArrayList<Movie>();
+		PreparedStatement st = null; //SQL STATEMENT
+		ResultSet rs = null;         //RESULT SET
 		
+		List<Movie> list = new ArrayList<Movie>(); //LIST OF MOVIES
+		
+		//TRY BLOCK
 		try {
-			st = conn.prepareStatement("SELECT * FROM movie");
+			st = conn.prepareStatement("SELECT * FROM movie"); 
 			rs = st.executeQuery();
 			
+			//WHILE BLOCK
 			while(rs.next()) {
-				Movie obj = instantiateMovie(rs);
+				Movie obj = instantiateMovie(rs); //OBJ INSTANTIATION
 				list.add(obj);
 			}
+			
 			return list;
 		}
 		
+		//CATCH BLOCK
 		catch (SQLException e) {
 			throw new DbException(e.getMessage());
 		}
 		
+		//FINALLY BLOCK 
 		finally {
-			DB.closeStatement(st);
-			DB.closeResultSet(rs);
+			DB.closeStatement(st); //CLOSE STATEMENT 
+			DB.closeResultSet(rs); //CLOSE RESULT SET
 		}
 	}
 
@@ -194,16 +199,44 @@ public class MovieDaoJDBC implements MovieDao {
 
 	@Override
 	public void update(Movie obj) {
-		// TODO Auto-generated method stub
+		//UPDATE MOVIE DATA 
+		PreparedStatement st = null;
 		
+		try {
+			st = conn.prepareStatement(null);
+		}
+		
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
+		// DELETE MOVIE BY ID
+		PreparedStatement st = null; //SQL STATEMENT
 		
+		//TRY BLOCK
+		try {
+			st = conn.prepareStatement("DELETE FROM movie WHERE Id = ?"); 
+			
+			st.setInt(1, id);
+			
+			st.executeUpdate();
+		}
+		
+        //CATCH BLOCK		
+		catch (SQLException e){
+			throw new DbException(e.getMessage());
+		}
+		
+		//FINALLY BLOCK
+		finally {
+			DB.closeStatement(st); //CLOSE STATEMENT
+		}	
 	}
-
-	
-
 }
